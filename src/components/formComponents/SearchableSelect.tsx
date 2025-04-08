@@ -10,11 +10,15 @@ const SearchableSelect = ({
 	startStation,
 	setStartStation,
 	placeholder = "Wybierz",
+	error = false,
+	errorText = "Pole jest wypełnione nieprawidłow"
 }: {
 	stations: string[]
 	startStation: string
 	setStartStation: (station: string) => void,
-	placeholder?: string
+	placeholder?: string,
+	error?: boolean,
+	errorText?: string
 }) => {
 	const [open, setOpen] = useState(false);
 	const [startStationSearch, setStartStationSearch] = useState("")
@@ -26,7 +30,10 @@ const SearchableSelect = ({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					className="justify-between max-w-[360px] w-full"
+					className={cn(
+						"justify-between max-w-[360px] w-full",
+						error && "border-red-500 text-red-500 hover:border-red-500"
+					)}
 				>
 					{startStation
 						? stations.find((station) => station === startStation) && startStation

@@ -23,9 +23,9 @@ function App() {
   }, [])
 
   return (
-    <>
+    <div className="main-page">
       <StationForm />
-    </>
+    </div>
   )
 }
 
