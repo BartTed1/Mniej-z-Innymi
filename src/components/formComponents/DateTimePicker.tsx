@@ -10,13 +10,15 @@ import { pl } from "date-fns/locale"
 interface DateTimePickerProps {
   date: Date | null
   setDate: (date: Date | null) => void
-  label?: string
+  label?: string,
+  error: boolean
 }
 
 const DateTimePicker = ({
   date,
   setDate,
   label = "Wybierz datę",
+  error = false,
 }: DateTimePickerProps) => {
   const [open, setOpen] = useState(false);
 
@@ -25,7 +27,10 @@ const DateTimePicker = ({
       <Label htmlFor="date" className="text-xs text-zinc-500">{label}</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-full">
+          <Button 
+            variant="outline" 
+            className={`w-full ${error ? 'border-red-500 focus:ring-red-500' : ''}`}
+          >
             {date
               ? `${date.toLocaleDateString()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
               : "Wybierz datę i godzinę"}

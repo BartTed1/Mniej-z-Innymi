@@ -2,10 +2,12 @@
   width: 100%;
   height: 100dvh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: oklch(96.8% 0.007 247.896);
   padding: 10px;
+  gap: 10px;
 }
 
 .mniej-z-innymi-card {

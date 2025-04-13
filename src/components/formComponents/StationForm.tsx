@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "../ui/label";
 import SearchableSelect from "./SearchableSelect";
 import DateTimePicker from "./DateTimePicker";
-import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader, Send, TrainFront } from "lucide-react";
@@ -18,7 +17,7 @@ const StationForm = () => {
   const [after, setAfter] = useState("01:00");
 
   useEffect(() => {
-    fetch("/src/assets/nazwy_stacji.json")
+    fetch("/nazwy_stacji.json")
       .then((response) => response.json())
       .then((data: string) => setStations([...new Set(data)]));
   }, []);
@@ -84,20 +83,27 @@ const StationForm = () => {
               </p>
             )}
           </div>
-          <DateTimePicker
-            date={departureDate}
-            setDate={setDepartureDate}
-            label="Data wyjazdu"
-          />
+            <div className="flex flex-col gap-1">
+            <DateTimePicker
+              date={departureDate}
+              setDate={setDepartureDate}
+              error={departureDate ? new Date(departureDate) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) : false}
+            />
+            {departureDate && new Date(departureDate) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) && (
+              <p className="text-red-500 text-xs mt-1">
+              Data wyjazdu musi być co najmniej 3 dni od dzisiaj
+              </p>
+            )}
+            </div>
           <div className="flex flex-col gap-2 mt-2 items-center max-w-[360px]">
             <p className="text-sm text-left w-full">Mogę wyruszyć:</p>
             <div className="flex gap-2 items-center w-full">
-              <div className="flex flex-col gap-2 w-full">
+              <div className="flex flex-col gap-1 w-full">
                 <Label className="text-xs text-zinc-500" htmlFor="before">Wcześniej o:</Label>
                 <Input className="w-full" id="before" type="time" value={before} onChange={(e) => setBefore(e.target.value)} />
               </div>
               <p>-</p>
-              <div className="flex flex-col gap-2 w-full">
+              <div className="flex flex-col gap-1 w-full">
                 <Label className="text-xs text-zinc-500" htmlFor="after">Później o:</Label>
                 <Input className="w-full" id="after" type="time" value={after} onChange={(e) => setAfter(e.target.value)} />
               </div>
@@ -110,7 +116,9 @@ const StationForm = () => {
         </form>
       </CardContent>
       <CardFooter>
-        <Button type="submit" className="w-full relative">
+        <Button type="submit" className="w-full relative" disabled={
+          !startStation || !endStation || !departureDate || !contactMethod
+        } onClick={handleSubmit}>
           Zgłoś się <Send className="absolute top-auto right-3 mt-0.5" />
         </Button>
       </CardFooter>
